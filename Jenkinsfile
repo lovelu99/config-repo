@@ -17,20 +17,23 @@ pipeline {
         stage('Update Image Tag') {
             steps {
                 script {
+                    def fileName = ''
+
                     if (params.IMAGE_NAME == 'noakhali/todo-frontend') {
-                        sh """
-                            echo "Updating frontend image"
-                            sed -i 's|^ *image:.*|  image: ${params.IMAGE_NAME}:${params.IMAGE_TAG}|g' ./manifest/frontend-1-deployment.yaml
-                            cat ./manifest/frontend-1-deployment.yaml
-                        """
+                        fileName = './manifest/frontend-1-deployment.yaml'
                     } else if (params.IMAGE_NAME == 'noakhali/todo-backend') {
-                        sh """
-                            echo "Updating backend image"
-                            sed -i 's|^ *image:.*|  image: ${params.IMAGE_NAME}:${params.IMAGE_TAG}|g' ./manifest/backend-1-deployment.yaml
-                        """
+                        fileName = './manifest/backend-1-deployment.yaml'
                     } else {
                         error "Unknown image name: ${params.IMAGE_NAME}"
                     }
+
+                    sh """
+                        echo "Updating image in ${fileName}"
+                        sed -i "s|${params.IMAGE_NAME}:.*|${params.IMAGE_NAME}:${params.IMAGE_TAG}|g" ${fileName}
+                        
+                        echo "Updated file:"
+                        cat ${fileName}
+                    """
                 }
             }
         }
