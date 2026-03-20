@@ -21,6 +21,7 @@ pipeline {
                 script {
                     if (params.IMAGE_NAME == 'noakhali/todo-frontend') {
                         env.FILE_NAME = './manifest/frontend-1-deployment.yaml'
+                        echo "file name is ${env.FILE_NAME}"
                     } else if (params.IMAGE_NAME == 'noakhali/todo-backend') {
                         env.FILE_NAME = './manifest/backend-1-deployment.yaml'
                     } else {
