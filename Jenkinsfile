@@ -19,14 +19,18 @@ pipeline {
         stage('Update Image Tag') {
             steps {
                 script {
+                    def selectedFile = ''
                     if (params.IMAGE_NAME == 'noakhali/todo-frontend') {
-                        env.FILE_NAME = './manifest/frontend-1-deployment.yaml'
+                        selectedFile = './manifest/frontend-1-deployment.yaml'
                         echo "file name is ${env.FILE_NAME}"
                     } else if (params.IMAGE_NAME == 'noakhali/todo-backend') {
-                        env.FILE_NAME = './manifest/backend-1-deployment.yaml'
+                        selectedFile = './manifest/backend-1-deployment.yaml'
                     } else {
                         error "Unknown image name: ${params.IMAGE_NAME}"
                     }
+                    env.FILE_NAME = selectedFile
+                    echo "file name is ${selectedFile}"
+                    echo "env file name is ${env.FILE_NAME}"
 
                     sh """
                         echo "Updating image in ${env.FILE_NAME}"
