@@ -30,8 +30,6 @@ pipeline {
                     sh """
                         echo "Updating image in ${FILE_NAME}"
                         sed -i "s|${params.IMAGE_NAME}:.*|${params.IMAGE_NAME}:${params.IMAGE_TAG}|g" ${FILE_NAME}
-                        echo "Updated file:"
-                        cat ${FILE_NAME}
                     """
                 }
             }
