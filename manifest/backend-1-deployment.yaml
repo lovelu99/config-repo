@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
         - name: api
-          image: noakhali/todo-backend:b85114f
+          image: noakhali/todo-backend:2cf3b7b
           ports:
             - containerPort: 8000
           envFrom:
