@@ -21,6 +21,7 @@ pipeline {
                         sh """
                             echo "Updating frontend image"
                             sed -i 's|^ *image:.*|  image: ${params.IMAGE_NAME}:${params.IMAGE_TAG}|g' ./manifest/frontend-1-deployment.yaml
+                            cat ./manifest/frontend-1-deployment.yaml
                         """
                     } else if (params.IMAGE_NAME == 'noakhali/todo-backend') {
                         sh """
