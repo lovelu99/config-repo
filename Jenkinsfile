@@ -5,7 +5,9 @@ pipeline {
         string(name: 'IMAGE_NAME', description: 'ENTER THE IMAGE NAME!')
         string(name: 'IMAGE_TAG', description: 'ENTER THE IMAGE TAG!')
     }
-
+    environment {
+        FILE_NAME = ''
+    }
     stages {
         stage('Checkout') {
             steps {
@@ -17,21 +19,19 @@ pipeline {
         stage('Update Image Tag') {
             steps {
                 script {
-                    def fileName = ''
-
                     if (params.IMAGE_NAME == 'noakhali/todo-frontend') {
-                        fileName = './manifest/frontend-1-deployment.yaml'
+                        env.FILE_NAME = './manifest/frontend-1-deployment.yaml'
                     } else if (params.IMAGE_NAME == 'noakhali/todo-backend') {
-                        fileName = './manifest/backend-1-deployment.yaml'
+                        env.FILE_NAME = './manifest/backend-1-deployment.yaml'
                     } else {
                         error "Unknown image name: ${params.IMAGE_NAME}"
                     }
 
                     sh """
-                        echo "Updating image in ${fileName}"
-                        sed -i "s|${params.IMAGE_NAME}:.*|${params.IMAGE_NAME}:${params.IMAGE_TAG}|g" ${fileName}
+                        echo "Updating image in ${env.FILE_NAME}"
+                        sed -i "s|${params.IMAGE_NAME}:.*|${params.IMAGE_NAME}:${params.IMAGE_TAG}|g" ${env.FILE_NAME}
                         echo "Updated file:"
-                        cat ${fileName}
+                        cat ${env.FILE_NAME}
                     """
                 }
             }
@@ -47,10 +47,13 @@ pipeline {
                     git config user.email "jenkins@myorg.com"
                     git config user.name "Jenkins CI"
                     git checkout main
-                    git add ${fileName}
-                    git commit -m 'CI updated: image tag to ${IMAGE_TAG}' 
-                    git push "https://\$GIT_USER:\$GIT_PASS@github.com/lovelu99/config-repo.git" main
-
+                    git add ${env.FILE_NAME}
+                    if git diff --cached --quiet; then
+                            echo "No changes to commit"
+                    else
+                        git commit -m 'CI updated: image tag to ${params.IMAGE_TAG}' 
+                        git push "https://\$GIT_USER:\$GIT_PASS@github.com/lovelu99/config-repo.git" main
+                    fi
                     """
                 }
             }
