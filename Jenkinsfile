@@ -56,5 +56,13 @@ pipeline {
                 }
             }
         }
+         stage('Cleaning Workspace') {
+            steps {
+                script{
+                    cleanWs()
+                }
+            }
+        }
+    }
     }
 }
