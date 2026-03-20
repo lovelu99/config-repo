@@ -22,7 +22,7 @@ pipeline {
                     def selectedFile = ''
                     if (params.IMAGE_NAME == 'noakhali/todo-frontend') {
                         selectedFile = './manifest/frontend-1-deployment.yaml'
-                        echo "file name is ${env.FILE_NAME}"
+                        echo "file name is ${selectedFile}"
                     } else if (params.IMAGE_NAME == 'noakhali/todo-backend') {
                         selectedFile = './manifest/backend-1-deployment.yaml'
                     } else {
