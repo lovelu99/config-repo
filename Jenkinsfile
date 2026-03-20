@@ -28,15 +28,15 @@ pipeline {
                     } else {
                         error "Unknown image name: ${params.IMAGE_NAME}"
                     }
-                    env.FILE_NAME = selectedFile
+                    FILE_NAME = selectedFile
                     echo "file name is ${selectedFile}"
-                    echo "env file name is ${env.FILE_NAME}"
+                    echo "env file name is ${FILE_NAME}"
 
                     sh """
-                        echo "Updating image in ${env.FILE_NAME}"
-                        sed -i "s|${params.IMAGE_NAME}:.*|${params.IMAGE_NAME}:${params.IMAGE_TAG}|g" ${env.FILE_NAME}
+                        echo "Updating image in ${FILE_NAME}"
+                        sed -i "s|${params.IMAGE_NAME}:.*|${params.IMAGE_NAME}:${params.IMAGE_TAG}|g" ${FILE_NAME}
                         echo "Updated file:"
-                        cat ${env.FILE_NAME}
+                        cat ${FILE_NAME}
                     """
                 }
             }
@@ -52,7 +52,7 @@ pipeline {
                     git config user.email "jenkins@myorg.com"
                     git config user.name "Jenkins CI"
                     git checkout main
-                    git add ${env.FILE_NAME}
+                    git add ${FILE_NAME}
                     if git diff --cached --quiet; then
                             echo "No changes to commit"
                     else
