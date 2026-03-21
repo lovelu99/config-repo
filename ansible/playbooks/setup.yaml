@@ -6,7 +6,7 @@
   roles:
     - docker
     - jenkins
----
+    
 - name: Setup Docker and sonarqube
   hosts: sonarqube
   become: yes
