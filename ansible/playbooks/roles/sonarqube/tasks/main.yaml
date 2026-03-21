@@ -1,7 +1,14 @@
+- name: Create SonarQube directory
+  file:
+    path: /opt/sonarqube
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
 - name: Copy docker-compose file
   copy:
-    src: docker-compose.yml
-    dest: /opt/sonarqube/docker-compose.yml
+    src: docker-compose.yaml
+    dest: /opt/sonarqube/docker-compose.yaml
     mode: '0644'
 - name: Start SonarQube stack
   community.docker.docker_compose_v2:
