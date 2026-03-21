@@ -1,0 +1,35 @@
+- name: Install prerequisites
+  apt:
+    name:
+      - wget
+      - gnupg
+      - apt-transport-https
+    state: present
+    update_cache: yes
+- name: Create keyrings directory for Trivy
+    file:
+      path: /usr/share/keyrings
+      state: directory
+      mode: "0755"
+- name: Download Trivy GPG key
+    get_url:
+      url: https://get.trivy.dev/deb/public.key
+      dest: /tmp/trivy-public.key
+      mode: "0644"
+- name: Convert Trivy GPG key to keyring
+    command: gpg --dearmor -o /usr/share/keyrings/trivy.gpg /tmp/trivy-public.key
+    args:
+      creates: /usr/share/keyrings/trivy.gpg
+- name: Add Trivy apt repository
+    apt_repository:
+      repo: "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://get.trivy.dev/deb generic main"
+      filename: trivy
+      state: present
+- name: Install Trivy 
+    apt:
+      name: trivy
+      state: present
+      update_cache: yes
+- name: Show Trivy version
+    debug:
+      var: trivy_version.stdout

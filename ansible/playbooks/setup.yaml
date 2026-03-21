@@ -6,7 +6,8 @@
   roles:
     - docker
     - jenkins
-    
+    - trivy
+
 - name: Setup Docker and sonarqube
   hosts: sonarqube
   become: yes
