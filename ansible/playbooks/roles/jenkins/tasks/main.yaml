@@ -1,8 +1,7 @@
+---
 - name: Install required packages
   apt:
-    name:
-      - fontconfig 
-      - openjdk-21-jre
+    name: "{{ jenkins_packages }}"
     state: present
     update_cache: yes
 
@@ -26,8 +25,7 @@
 
 - name: Install Jenkins
   apt:
-    name:
-      - jenkins
+    name: jenkins
     state: present
     update_cache: yes
 
@@ -36,3 +34,64 @@
     name: jenkins
     state: started
     enabled: yes
+
+- name: Add users to docker group
+  user:
+    name: "{{ item }}"
+    groups: docker
+    append: yes
+  loop:
+    - jenkins
+    - ubuntu
+
+- name: Create installation directory
+  file:
+    path: "{{ sonar_scanner_install_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Download SonarScanner CLI
+  get_url:
+    url: "{{ sonar_scanner_url }}"
+    dest: "/tmp/{{ sonar_scanner_name }}.zip"
+    mode: '0644'
+
+- name: Extract SonarScanner CLI
+  unarchive:
+    src: "/tmp/{{ sonar_scanner_name }}.zip"
+    dest: "{{ sonar_scanner_install_dir }}"
+    remote_src: true
+    creates: "{{ sonar_scanner_install_dir }}/{{ sonar_scanner_name }}"
+
+- name: Create stable symlink
+  file:
+    src: "{{ sonar_scanner_install_dir }}/{{ sonar_scanner_name }}"
+    dest: "{{ sonar_scanner_symlink }}"
+    state: link
+    force: yes
+
+- name: Create profile script for SonarScanner
+  copy:
+    dest: /etc/profile.d/sonar-scanner.sh
+    mode: '0644'
+    content: |
+      export PATH={{ sonar_scanner_symlink }}/bin:$PATH
+
+- name: Ensure scanner directory permissions
+  file:
+    path: "{{ sonar_scanner_install_dir }}/{{ sonar_scanner_name }}"
+    state: directory
+    recurse: true
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Verify sonar-scanner for jenkins user
+  become_user: jenkins
+  command: "{{ sonar_scanner_symlink }}/bin/sonar-scanner --version"
+  register: sonar_scanner_installed_version
+  changed_when: false
+
+- name: Show installed sonar-scanner version
+  debug:
+    var: sonar_scanner_installed_version.stdout_lines

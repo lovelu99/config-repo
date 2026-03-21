@@ -1,0 +1,7 @@
+- name: Setup Jenkins and Docker
+  hosts: jenkins
+  become: yes
+
+  roles:
+    - docker
+    - jenkins
