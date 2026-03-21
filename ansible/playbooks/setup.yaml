@@ -1,3 +1,4 @@
+---
 - name: Setup Jenkins and Docker
   hosts: jenkins
   become: yes
@@ -5,3 +6,11 @@
   roles:
     - docker
     - jenkins
+---
+- name: Setup Docker and sonarqube
+  hosts: sonarqube
+  become: yes
+
+  roles:
+    - docker
+    - sonarqube
