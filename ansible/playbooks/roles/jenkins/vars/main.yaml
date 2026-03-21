@@ -4,9 +4,12 @@ jenkins_packages:
   - curl
   - unzip
 
-sonar_scanner_version: "6.2.1.4610"
+sonar_scanner_version: "7.2.0.5079"
 sonar_scanner_platform: "linux-x64"
-sonar_scanner_name: "sonar-scanner-{{ sonar_scanner_version }}-{{ sonar_scanner_platform }}"
-sonar_scanner_url: "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/{{ sonar_scanner_name }}.zip"
+
+sonar_scanner_zip_name: "sonar-scanner-cli-{{ sonar_scanner_version }}-{{ sonar_scanner_platform }}"
+sonar_scanner_dir_name: "sonar-scanner-{{ sonar_scanner_version }}-{{ sonar_scanner_platform }}"
+
+sonar_scanner_url: "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/{{ sonar_scanner_zip_name }}.zip"
 sonar_scanner_install_dir: "/opt"
 sonar_scanner_symlink: "/opt/sonar-scanner"

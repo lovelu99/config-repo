@@ -53,19 +53,19 @@
 - name: Download SonarScanner CLI
   get_url:
     url: "{{ sonar_scanner_url }}"
-    dest: "/tmp/{{ sonar_scanner_name }}.zip"
+    dest: "/tmp/{{ sonar_scanner_zip_name }}.zip"
     mode: '0644'
 
 - name: Extract SonarScanner CLI
   unarchive:
-    src: "/tmp/{{ sonar_scanner_name }}.zip"
+    src: "/tmp/{{ sonar_scanner_zip_name }}.zip"
     dest: "{{ sonar_scanner_install_dir }}"
     remote_src: true
-    creates: "{{ sonar_scanner_install_dir }}/{{ sonar_scanner_name }}"
+    creates: "{{ sonar_scanner_install_dir }}/{{ sonar_scanner_dir_name }}"
 
 - name: Create stable symlink
   file:
-    src: "{{ sonar_scanner_install_dir }}/{{ sonar_scanner_name }}"
+    src: "{{ sonar_scanner_install_dir }}/{{ sonar_scanner_dir_name }}"
     dest: "{{ sonar_scanner_symlink }}"
     state: link
     force: yes
@@ -79,15 +79,14 @@
 
 - name: Ensure scanner directory permissions
   file:
-    path: "{{ sonar_scanner_install_dir }}/{{ sonar_scanner_name }}"
+    path: "{{ sonar_scanner_install_dir }}/{{ sonar_scanner_dir_name }}"
     state: directory
     recurse: true
     owner: root
     group: root
     mode: '0755'
 
-- name: Verify sonar-scanner for jenkins user
-  become_user: jenkins
+- name: Verify sonar-scanner
   command: "{{ sonar_scanner_symlink }}/bin/sonar-scanner --version"
   register: sonar_scanner_installed_version
   changed_when: false
