@@ -31,6 +31,13 @@
     name: trivy
     state: present
     update_cache: yes
+    
+- name: Verify Trivy installation
+  command: trivy --version
+  register: trivy_version
+  changed_when: false
+  failed_when: trivy_version.rc != 0
+
 - name: Show Trivy version
   debug:
     var: trivy_version.stdout
