@@ -94,3 +94,9 @@
 - name: Show installed sonar-scanner version
   debug:
     var: sonar_scanner_installed_version.stdout_lines
+    
+- name: Restart Jenkins
+  service:
+    name: jenkins
+    state: restarted
+    enabled: yes
