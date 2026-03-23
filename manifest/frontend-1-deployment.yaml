@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: web
-          image: noakhali/todo-frontend:c044fbc
+          image: noakhali/todo-frontend:1918439
           ports:
             - containerPort: 80
           readinessProbe:
