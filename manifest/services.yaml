@@ -3,6 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: todo-backend-service
+  namespace: todo
 spec:
   selector:
     app: todo-backend
@@ -16,6 +17,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: todo-frontend-service
+  namespace: todo
 spec:
   selector:
     app: todo-frontend
@@ -30,6 +32,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mysql
+  namespace: todo
 spec:
   clusterIP: None
   ports:
