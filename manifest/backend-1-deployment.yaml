@@ -3,6 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: todo-backend-config
+  namespace: todo
 data:
   DB_HOST: "mysql"          # Kubernetes service name
   DB_PORT: "3306"
@@ -12,7 +13,8 @@ data:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: todo-backend  
+  name: todo-backend
+  namespace: todo  
 spec:
   replicas: 1
   selector:
@@ -50,6 +52,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: todo-backend-secret
+  namespace: todo
 type: Opaque
 stringData:
   DB_PASS: "AppPass123!"

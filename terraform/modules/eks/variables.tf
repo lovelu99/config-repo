@@ -17,7 +17,10 @@ variable "cluster_version" {
 variable "vpc_id" {
   type = string
 }
-
+variable "bastion_sg_id" {
+  description = "Security Group ID of Bastion Host"
+  type        = string
+}
 variable "subnet_ids" {
   description = "Private subnet IDs for EKS cluster and node group"
   type        = list(string)

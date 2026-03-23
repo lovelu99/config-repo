@@ -45,6 +45,25 @@ resource "aws_security_group" "eks_cluster" {
   })
 }
 
+resource "aws_security_group_rule" "eks_cluster_ingress_bastion" {
+  type                     = "ingress"
+  from_port                = 443
+  to_port                  = 443
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.eks_cluster.id
+  source_security_group_id = var.bastion_sg_id   # pass this from root module
+  description              = "Allow bastion to access EKS API"
+}
+
+resource "aws_security_group_rule" "eks_cluster_egress_all" {
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  security_group_id = aws_security_group.eks_cluster.id
+  cidr_blocks       = ["0.0.0.0/0"]
+  description       = "Allow all outbound traffic"
+}
 # --------------------------------------------------
 # EKS Cluster
 # --------------------------------------------------

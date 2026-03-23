@@ -35,11 +35,11 @@ desired_size = 2
 min_size     = 1
 max_size     = 4
 
-ami_id = "ami-02dfbd4ff395f2a1b" # example Amazon Linux 2023, replace with your region-valid AMI
+ami_id = "ami-0ec10929233384c7f" # example Amazon Linux 2023, replace with your region-valid AMI
 key_name = "shefat-va-key"
 my_ip_cidr = "74.72.247.231/32"
 
 bastion_instance_type   = "t3.micro"
-jenkins_instance_type   = "t3.micro"
-sonarqube_instance_type = "t3.micro"
+jenkins_instance_type   = "t3.small"
+sonarqube_instance_type = "c7i-flex.large"
 
