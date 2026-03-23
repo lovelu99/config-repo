@@ -23,7 +23,7 @@ private_subnet_cidrs = [
 nat_gateway_count = 1
 
 cluster_name    = "prod-eks-cluster"
-cluster_version = "1.30"
+cluster_version = "1.34"
 
 node_group_name = "prod-eks-ng"
 
@@ -31,8 +31,8 @@ instance_types = [
   "t3.small"
 ]
 
-desired_size = 2
-min_size     = 1
+desired_size = 3
+min_size     = 2
 max_size     = 4
 
 ami_id = "ami-0ec10929233384c7f" # example Amazon Linux 2023, replace with your region-valid AMI

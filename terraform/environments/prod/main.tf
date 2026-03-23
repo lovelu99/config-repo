@@ -21,7 +21,7 @@ module "vpc" {
 
 module "eks" {
   source = "../../modules/eks"
-
+  aws_region              = var.aws_region
   project_name            = var.project_name
   environment             = var.environment
   cluster_name            = var.cluster_name

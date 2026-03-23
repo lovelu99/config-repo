@@ -234,3 +234,42 @@ resource "aws_eks_addon" "ebs_csi" {
     Name = "${var.cluster_name}-ebs-csi-addon"
   })
 }
+
+################## default storage class
+provider "kubernetes" {
+  host                   = aws_eks_cluster.this.endpoint
+  cluster_ca_certificate = base64decode(aws_eks_cluster.this.certificate_authority[0].data)
+
+  exec {
+    api_version = "client.authentication.k8s.io/v1beta1"
+    command     = "aws"
+    args = [
+      "eks",
+      "get-token",
+      "--cluster-name", aws_eks_cluster.this.name,
+      "--region", var.aws_region,
+      "--output", "json"
+    ]
+  }
+}
+
+resource "kubernetes_storage_class_v1" "gp3" {
+  metadata {
+    name = "gp3"
+
+    annotations = {
+      "storageclass.kubernetes.io/is-default-class" = "true"
+    }
+  }
+
+  storage_provisioner = "ebs.csi.aws.com"
+
+  parameters = {
+    type   = "gp3"
+    fsType = "ext4"
+  }
+
+  reclaim_policy         = "Delete"
+  volume_binding_mode    = "WaitForFirstConsumer"
+  allow_volume_expansion = true
+}
