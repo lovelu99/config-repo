@@ -69,66 +69,73 @@ module "bastion" {
   }
 }
 
-# module "jenkins" {
-#   source = "../../modules/ec2"
+module "jenkins" {
+  source = "../../modules/ec2"
 
-#   name                        = "${var.project_name}-${var.environment}-jenkins"
-#   ami_id                      = var.ami_id
-#   instance_type               = var.jenkins_instance_type
-#   subnet_id                   = module.vpc.private_subnet_ids[0]
-#   vpc_id                      = module.vpc.vpc_id
-#   associate_public_ip_address = false
-#   key_name                    = var.key_name
-#   allowed_ssh_cidrs           = [var.vpc_cidr]
+  name                        = "${var.project_name}-${var.environment}-jenkins"
+  ami_id                      = var.ami_id
+  instance_type               = var.jenkins_instance_type
+  subnet_id                   = module.vpc.private_subnet_ids[0]
+  #subnet_id                   = module.vpc.public_subnet_ids[0]
+  vpc_id                      = module.vpc.vpc_id
+  #associate_public_ip_address = true
+  associate_public_ip_address = false
+  key_name                    = var.key_name
+  allowed_ssh_cidrs           = [var.vpc_cidr]
 
-#   ingress_rules = [
-#     {
-#       description = "Jenkins UI"
-#       from_port   = 8080
-#       to_port     = 8080
-#       protocol    = "tcp"
-#       cidr_blocks = [var.vpc_cidr]
-#     }
-#   ]
+  ingress_rules = [
+    {
+      description = "Jenkins UI"
+      from_port   = 8080
+      to_port     = 8080
+      protocol    = "tcp"
+      #cidr_blocks = [var.allow_all_ip]
+      cidr_blocks = [var.vpc_cidr]
+    }
+  ]
 
-#   root_volume_size = 20
+  root_volume_size = 15
 
-#   tags = {
-#     Project     = var.project_name
-#     Environment = var.environment
-#     Role        = "jenkins"
-#     ManagedBy   = "Terraform"
-#   }
-# }
+  tags = {
+    Project     = var.project_name
+    Environment = var.environment
+    Role        = "jenkins"
+    ManagedBy   = "Terraform"
+  }
+}
 
-# module "sonarqube" {
-#   source = "../../modules/ec2"
+module "sonarqube" {
+  source = "../../modules/ec2"
 
-#   name                        = "${var.project_name}-${var.environment}-sonarqube"
-#   ami_id                      = var.ami_id
-#   instance_type               = var.sonarqube_instance_type
-#   subnet_id                   = module.vpc.private_subnet_ids[1]
-#   vpc_id                      = module.vpc.vpc_id
-#   associate_public_ip_address = false
-#   key_name                    = var.key_name
-#   allowed_ssh_cidrs           = [var.vpc_cidr]
+  name                        = "${var.project_name}-${var.environment}-sonarqube"
+  ami_id                      = var.ami_id
+  instance_type               = var.sonarqube_instance_type
+  subnet_id                   = module.vpc.private_subnet_ids[1]
+  #subnet_id                   = module.vpc.public_subnet_ids[1]
+  vpc_id                      = module.vpc.vpc_id
+  associate_public_ip_address = false
+  #associate_public_ip_address = true
+  key_name                    = var.key_name
+  allowed_ssh_cidrs           = [var.vpc_cidr]
 
-#   ingress_rules = [
-#     {
-#       description = "SonarQube UI"
-#       from_port   = 9000
-#       to_port     = 9000
-#       protocol    = "tcp"
-#       cidr_blocks = [var.vpc_cidr]
-#     }
-#   ]
+  ingress_rules = [
+    {
+      description = "SonarQube UI"
+      from_port   = 9000
+      to_port     = 9000
+      protocol    = "tcp"
+      #cidr_blocks = [var.allow_all_ip]
+      cidr_blocks = [var.vpc_cidr]
+      
+    }
+  ]
 
-#   root_volume_size = 20
+  root_volume_size = 15
 
-#   tags = {
-#     Project     = var.project_name
-#     Environment = var.environment
-#     Role        = "sonarqube"
-#     ManagedBy   = "Terraform"
-#   }
-# }
+  tags = {
+    Project     = var.project_name
+    Environment = var.environment
+    Role        = "sonarqube"
+    ManagedBy   = "Terraform"
+  }
+}

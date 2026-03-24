@@ -75,6 +75,9 @@ variable "my_ip_cidr" {
   type = string
 }
 
+variable "allow_all_ip" {
+  type = string
+} 
 variable "bastion_instance_type" {
   type = string
 }

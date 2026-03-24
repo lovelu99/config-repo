@@ -70,3 +70,8 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "allow_all_ip" {
+  type = string
+ default="0.0.0.0/0"
+}
